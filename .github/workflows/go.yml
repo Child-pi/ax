@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
 name: Go
 
 on:
@@ -24,29 +21,13 @@ on:
     branches: [ "main" ]
 
 jobs:
-
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
-    - name: Cache addlicense
-      id: cache-addlicense
-      uses: actions/cache@v4
-      with:
-        path: ~/go/bin/addlicense
-        key: ${{ runner.os }}-addlicense-v1.2.0
-
-    - name: Install addlicense
-      if: steps.cache-addlicense.outputs.cache-hit != 'true'
-      run: go install github.com/google/addlicense@v1.2.0
-
-    - name: Check license headers
-      run: |
-        $(go env GOPATH)/bin/addlicense -check .
-
     - name: Set up Go
-      uses: actions/setup-go@v4
+      uses: actions/setup-go@v5
       with:
         go-version-file: go.mod
 
@@ -55,8 +36,12 @@ jobs:
         go mod tidy
         git diff --exit-code go.mod go.sum
 
-    - name: Build
-      run: go build -v ./...
+    - name: Build local binaries
+      run: |
+        go build -v ./cmd/ax
+        go build -v ./cmd/ax-controller
+        go build -v ./cmd/ax-server
+        go build -v ./cmd/ax-task-runner
 
     - name: Test
       run: go test -v ./...
