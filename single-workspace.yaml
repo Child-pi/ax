@@ -1,0 +1,11 @@
+apiVersion: ax.io/v1alpha1
+kind: Workspace
+metadata:
+  name: agent-workspace
+  atespace: default
+spec:
+  git:
+    - name: chalk
+      repo: "https://github.com/chalk/chalk.git"
+      branch: "main"
+      depth: 1

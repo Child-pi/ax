@@ -1,0 +1,70 @@
+apiVersion: ax.io/v1alpha1
+kind: Task
+metadata:
+  name: colab-agent-task
+  atespace: default
+spec:
+  command: ["python3", "-c", "print('Hello from sandboxed Agent!'); import time; time.sleep(10)"]
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "1Gi"
+    limits:
+      cpu: "2"
+      memory: "4Gi"
+  workspaces:
+    - name: agent-workspace
+      path: "/content/workspace"
+      goal: "Initialize Git repository and prepare build environment"
+  gateway:
+    name: agent-gateway
+  env:
+    - name: AGENT_MODE
+      value: "colab_demo"
+  debug: true
+---
+apiVersion: ax.io/v1alpha1
+kind: Workspace
+metadata:
+  name: agent-workspace
+  atespace: default
+spec:
+  git:
+    - name: chalk
+      repo: "https://github.com/chalk/chalk.git"
+      branch: "main"
+      depth: 1
+  mcp:
+    registries:
+      - provider: google
+        query: "mcp.tags:developer-tools"
+---
+apiVersion: ax.io/v1alpha1
+kind: Gateway
+metadata:
+  name: agent-gateway
+  atespace: default
+spec:
+  listeners:
+    - name: grpc
+      port: 8494
+      protocol: gRPC
+    - name: http
+      port: 8080
+      protocol: HTTP
+  egress:
+    allowlist:
+      hosts:
+        - host: "*"
+          port: 443
+---
+apiVersion: ax.io/v1alpha1
+kind: Model
+metadata:
+  name: default-model
+  atespace: default
+spec:
+  provider: google
+  model: gemini-3.8-flash
+  parameters:
+    temperature: 0.7

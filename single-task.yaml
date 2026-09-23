@@ -1,0 +1,13 @@
+apiVersion: ax.io/v1alpha1
+kind: Task
+metadata:
+  name: colab-agent-task
+  atespace: default
+spec:
+  command: ["bash", "-c", "echo 'Agent started! Checking workspace:'; ls -la /content/workspace/chalk; sleep 15"]
+  workspaces:
+    - name: agent-workspace
+      path: "/content/workspace"
+  env:
+    - name: DEMO_RUN
+      value: "true"
