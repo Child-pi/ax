@@ -93,10 +93,17 @@ ax resume task task123               # pick up where it left off
 
 Want to see the whole lifecycle end to end? Run [`./demo.sh`](demo.sh). It applies a custom workspace, waits for readiness, runs commands over `ax ssh`, and suspends the task.
 
+### Interactive Google Colab Demo
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Child-pi/ax/blob/main/examples/ax_google_colab_demo.ipynb)
+
+Run and explore the AX control plane (`ax-server`), CLI (`ax`), and sandbox execution (`ax-task-runner`) in Google Colab without needing a Kubernetes cluster: [`examples/ax_google_colab_demo.ipynb`](examples/ax_google_colab_demo.ipynb).
+
 ## Documentation
 
 | Guide | Read it to... |
 |---|---|
+| [Colab Tutorial](examples/ax_google_colab_demo.ipynb) | Interactive notebook to explore AX control plane and task runner in Google Colab. |
 | [Concepts](docs/concepts.md) | Learn what a `Task`, `Workspace`, `Gateway`, and `Model` each do, and how a task moves through phases and conditions. |
 | [Manifests](docs/manifests.md) | Write your own YAML, with an annotated example of every kind. |
 | [Sandbox](docs/sandbox.md) | See what the runner does on boot and what your command can rely on: metadata server, guest services, environment. |
